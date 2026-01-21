@@ -1,4 +1,4 @@
-package security;
+package dev.oudom.gateway.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,10 @@ public class SecurityConfig {
         http.logout(logoutSpec -> logoutSpec.disable());
         http.httpBasic(httpBasicSpec -> httpBasicSpec.disable());
 
-        http.oauth2Login(Customizer.withDefaults());
+        http.oauth2ResourceServer(auth2 -> auth2
+                .jwt(Customizer.withDefaults()));
+
+        //http.oauth2Login(Customizer.withDefaults());
 
 
         return http.build();
