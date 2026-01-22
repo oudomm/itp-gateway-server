@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.logout(logoutSpec -> logoutSpec.disable());
         http.httpBasic(httpBasicSpec -> httpBasicSpec.disable());
 
-        http.oauth2ResourceServer(auth2 -> auth2
+        http.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults()));
 
         //http.oauth2Login(Customizer.withDefaults());
