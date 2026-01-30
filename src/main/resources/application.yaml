@@ -30,6 +30,9 @@ spring:
                   args:
                     name: pipelineCircuitBreaker
                     fallbackUri: forward:/fallback/pipeline
+#                    statusCode:
+#                      - 500
+#                      - 400
             - id: account
               uri: lb://account
               predicates:
