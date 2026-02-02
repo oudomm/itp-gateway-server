@@ -34,16 +34,21 @@ spring:
                 - Path=/pipeline-service/**
               filters:
                 - RewritePath=/pipeline-service/(?<segment>.*),/$\{segment}
-                - name: Retry
+                - name: RequestRateLimiter
                   args:
-                    retries: 5
-                    statuses: BAD_GATEWAY
-                    methods: GET
-                    backoff:
-                      firstBackoff: 10ms
-                      maxBackoff: 50ms
-                      factor: 2
-                      basedOnPreviousValue: false
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 1
+#                - name: Retry
+#                  args:
+#                    retries: 5
+#                    statuses: BAD_GATEWAY
+#                    methods: GET
+#                    backoff:
+#                      firstBackoff: 10ms
+#                      maxBackoff: 50ms
+#                      factor: 2
+#                      basedOnPreviousValue: false
 #                - name: CircuitBreaker
 #                  args:
 #                    name: pipelineCircuitBreaker
