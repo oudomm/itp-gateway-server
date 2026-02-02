@@ -24,6 +24,9 @@ spring:
             locator:
               enabled: false
               lower-case-service-id: true
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 5s
           routes:
             - id: pipeline
               uri: lb://pipeline
@@ -31,10 +34,20 @@ spring:
                 - Path=/pipeline-service/**
               filters:
                 - RewritePath=/pipeline-service/(?<segment>.*),/$\{segment}
-                - name: CircuitBreaker
+                - name: Retry
                   args:
-                    name: pipelineCircuitBreaker
-                    fallbackUri: forward:/fallback/pipeline-service/client/account/secured
+                    retries: 5
+                    statuses: BAD_GATEWAY
+                    methods: GET
+                    backoff:
+                      firstBackoff: 10ms
+                      maxBackoff: 50ms
+                      factor: 2
+                      basedOnPreviousValue: false
+#                - name: CircuitBreaker
+#                  args:
+#                    name: pipelineCircuitBreaker
+#                    fallbackUri: forward:/fallback/pipeline-service/client/account/secured
             #                  statusCodes:
             #                    - 500
             #                    - 404
